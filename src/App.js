@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import './index.css';
 
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 
 export default function App() {
   const name = 'John Doe'
@@ -38,15 +38,17 @@ const Home = () => (
 const About = ({match:{params:{name}}}) => (
   // props.match.params.name
   <Fragment>
+    { name !== 'John Doe' ? <Redirect to="/" /> : null}
     <h1>About {name}</h1>
     <FakeText />
   </Fragment>
 );
 
 // Contact page
-const Contact = () => (
+const Contact = ({history}) => (
   <Fragment>
     <h1>Contact</h1>
+    <button onClick={() => history.push('/') } >Go to home</button>
     <FakeText />
   </Fragment>
 );
