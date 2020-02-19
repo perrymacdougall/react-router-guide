@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import './index.css';
 
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect, useHistory, useParams, useLocation } from 'react-router-dom';
 
 export default function App() {
   const name = 'John Doe'
@@ -20,6 +20,7 @@ export default function App() {
           <Route path="/" exact component={Home} />
           <Route path="/about/:name" component={About} />
           <Route path="/contact" component={Contact} />
+          <Route render={() => {return(<h1>404: Page not found</h1>)}} />
         </Switch>
       </main>
     </Router>
@@ -35,23 +36,31 @@ const Home = () => (
 );
 
 // About page
-const About = ({match:{params:{name}}}) => (
+const About = () => {
   // props.match.params.name
-  <Fragment>
-    { name !== 'John Doe' ? <Redirect to="/" /> : null}
-    <h1>About {name}</h1>
-    <FakeText />
-  </Fragment>
-);
+  const { name } = useParams();
+  return (
+    <Fragment>
+      { name !== 'John Doe' ? <Redirect to="/" /> : null}
+      <h1>About {name}</h1>
+      <FakeText />
+    </Fragment>
+  )
+};
 
 // Contact page
-const Contact = ({history}) => (
-  <Fragment>
-    <h1>Contact</h1>
-    <button onClick={() => history.push('/') } >Go to home</button>
-    <FakeText />
-  </Fragment>
-);
+const Contact = () => {
+  const history = useHistory();
+  const { pathname } = useLocation();
+  return (
+    <Fragment>
+      <h1>Contact</h1>
+      <p>Current URL: {pathname}</p>
+      <button onClick={() => history.push('/') } >Go to home</button>
+      <FakeText />
+    </Fragment>
+  )
+};
 
 const FakeText = () => (
   <p>
