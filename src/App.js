@@ -1,17 +1,28 @@
 import React, { Fragment } from 'react';
 import './index.css';
 
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+
 export default function App() {
+  const name = 'John Doe'
   return (
-    <main>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </nav>
-    </main>
+    <Router>
+      <main>
+        <nav>
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to={`/about/${name}`}>About</Link></li>
+            <li><Link to="/contact">Contact</Link></li>
+          </ul>
+        </nav>
+
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/about/:name" component={About} />
+          <Route path="/contact" component={Contact} />
+        </Switch>
+      </main>
+    </Router>
   );
 }
 
@@ -24,9 +35,10 @@ const Home = () => (
 );
 
 // About page
-const About = () => (
+const About = ({match:{params:{name}}}) => (
+  // props.match.params.name
   <Fragment>
-    <h1>About</h1>
+    <h1>About {name}</h1>
     <FakeText />
   </Fragment>
 );
